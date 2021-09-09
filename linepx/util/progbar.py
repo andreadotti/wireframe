@@ -51,7 +51,7 @@ class progbar(object):
             sys.stdout.write('\b' * prev_total_width)
             sys.stdout.write('\r')
 
-            if self.target is not -1:
+            if self.target != -1:
                 numdigits = int(np.floor(np.log10(self.target))) + 1
                 barstr = '%%%dd/%%%dd [' % (numdigits, numdigits)
                 bar = barstr % (current, self.target)
@@ -74,7 +74,7 @@ class progbar(object):
                 time_per_unit = 0
             eta = time_per_unit * (self.target - current)
             info = ''
-            if current < self.target and self.target is not -1:
+            if current < self.target and self.target != -1:
                 info += '  ETA: %ds' % eta
             else:
                 info += '  %ds' % (now - self.start)
