@@ -40,8 +40,8 @@ class indoorDist(Dataset):
         return len(self.imageInfo['imagePath'])
 
     def preprocess(self, im):
-        mean = torch.Tensor([0.485, 0.456, 0.406])
-        std = torch.Tensor([0.229, 0.224, 0.225])
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
         im = np.asarray(im)
         im = t.normalize(im, mean, std)
         im = np.transpose(im, (2, 0, 1))
@@ -56,8 +56,8 @@ class indoorDist(Dataset):
 
     def postprocess(self):
         def process(im):
-            mean = torch.Tensor([0.485, 0.456, 0.406])
-            std = torch.Tensor([0.229, 0.224, 0.225])
+            mean = np.array([0.485, 0.456, 0.406])
+            std = np.array([0.229, 0.224, 0.225])
             im = np.transpose(im, (1, 2, 0))
             im = t.unNormalize(im, mean, std)
             return im
