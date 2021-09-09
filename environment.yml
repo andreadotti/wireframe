@@ -1,0 +1,24 @@
+channels:
+- pytorch
+- conda-forge
+dependencies:
+- python>=3
+- cudatoolkit=10.2
+- pytorch
+- torchvision
+- opencv
+- scipy
+- numpy
+- progress
+- protobuf
+- joblib
+- tqdm
+- dominate
+- notebook
+- jupyter_contrib_nbextensions
+- nbconvert
+- nb_conda
+- nb_conda_kernels
+- matplotlib
+- progressbar
+
