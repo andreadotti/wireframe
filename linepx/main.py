@@ -62,9 +62,9 @@ def main():
     trainer.LRDecay(startEpoch)
 
     for epoch in range(startEpoch, opt.nEpochs + 1):
-        trainer.scheduler.step()
 
         trainLoss = trainer.train(trainLoader, epoch)
+        trainer.scheduler.step()
         testLoss = trainer.test(valLoader, epoch)
 
         bestModel = False

@@ -47,20 +47,20 @@ class Loss(nn.Module):
         # print("#junc: {} | #masked: {}".format(num_junc.data[0], select_junc_num.data[0]))
 
         # junc_conf_loss
-        junc_conf_loss = torch.nn.NLLLoss(weight=self.weights, reduce=False)(
+        junc_conf_loss = torch.nn.NLLLoss(weight=self.weights, reduction='none')( #reduce=False)(
             F.log_softmax(junction_logits, dim=1), junc_conf_var)
         junc_conf_loss = torch.sum(junc_conf_loss) / (select_junc_num + 1e-30)
 
         # junc_res_loss
         junc_res_loss = torch.nn.MSELoss(
-            reduce=False)(junction_loc, junc_res_var)
+            reduction='none')(junction_loc, junc_res_var)
         junc_res_loss = torch.mul(mask_junc, junc_res_loss)
         junc_res_loss = torch.sum(junc_res_loss) / (num_junc + 1e-30)
         # junc_res_loss = torch.mean(junc_res_loss)
 
         # bin_res_loss
         bin_res_loss = torch.nn.MSELoss(
-            reduce=False)(bin_residual, bin_res_var)
+            reduction='none')(bin_residual, bin_res_var)
         bin_res_loss = torch.mul(bin_res_loss, mask_bin)
         bin_res_loss = torch.sum(bin_res_loss)
         # bin_res_loss = bin_res_loss / float(num_junc * self.num_bin + 1e-20)
@@ -69,7 +69,7 @@ class Loss(nn.Module):
         # bin_conf_loss
         bin_logits_r = bin_logits.view(-1, 2, self.grid_h * self.num_bin, self.grid_w)
         bin_conf_r = bin_conf_var.view(-1, self.grid_h * self.num_bin, self.grid_w)
-        bin_conf_loss = torch.nn.NLLLoss(weight=None, reduce=False)(
+        bin_conf_loss = torch.nn.NLLLoss(weight=None, reduction='none')(
             F.log_softmax(bin_logits_r, dim=1), bin_conf_r)
         bin_conf_loss = bin_conf_loss.view(-1, self.num_bin, self.grid_h, self.grid_w)
 

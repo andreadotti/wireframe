@@ -215,7 +215,7 @@ class Trainer():
                 mins, secs = divmod(remaining_seconds, 60)
                 hr, mins = divmod(mins, 60)
                 rsecs = "{:02d}:{:02d}:{:02d}".format(int(hr), int(mins), int(secs))
-                logStr = '{split} epoch: [{0}][{1}/{2}]| LR: {3:.6f}| Speed: {4:.2f}/s| Remaining: {5} | Loss {Loss.avg:.6f}|  JuncConf {JC.avg:.6f}| JuncRes {JR.avg:.6f}| BinConf {BC.avg:.6f}| BinRes {BR.avg:.6f}'.format(epoch, i, iter_per_epoch, self.lr_scheduler.get_lr()[0], float(i+1.)/elapsed, rsecs, split=split, Loss=Loss, JC=LossJuncConf, JR=LossJuncRes, BC=LossBinConf, BR=LossBinRes)
+                logStr = '{split} epoch: [{0}][{1}/{2}]| LR: {3:.6f}| Speed: {4:.2f}/s| Remaining: {5} | Loss {Loss.avg:.6f}|  JuncConf {JC.avg:.6f}| JuncRes {JR.avg:.6f}| BinConf {BC.avg:.6f}| BinRes {BR.avg:.6f}'.format(epoch, i, iter_per_epoch, self.lr_scheduler.get_last_lr()[0], float(i+1.)/elapsed, rsecs, split=split, Loss=Loss, JC=LossJuncConf, JR=LossJuncRes, BC=LossBinConf, BR=LossBinRes)
                 if i == iter_per_epoch - 1:
                     with open(self.logfile, 'a') as fn:
                         fn.write('{}\n'.format(logStr))
@@ -293,7 +293,7 @@ class Trainer():
             rsecs = "{:02d}:{:02d}:{:02d}".format(int(hr), int(mins), int(secs))
 
             bar.suffix = '{split} epoch: [{0}][{1}/{2}]| LR: {3:.6f}| Speed: {4:.2f}/s| Remaining: {5} | Loss {Loss.avg:.6f}|  JuncConf {JC.avg:.6f}| JuncRes {JR.avg:.6f}| BinConf {BC.avg:.6f}| BinRes {BR.avg:.6f}'.format(
-                epoch, i, iter_per_epoch, self.lr_scheduler.get_lr()[0], float(i+1.)/elapsed, rsecs, split=split, Loss = Loss, JC=LossJuncConf, JR=LossJuncRes, BC=LossBinConf, BR=LossBinRes)
+                epoch, i, iter_per_epoch, self.lr_scheduler.get_last_lr()[0], float(i+1.)/elapsed, rsecs, split=split, Loss = Loss, JC=LossJuncConf, JR=LossJuncRes, BC=LossBinConf, BR=LossBinRes)
             bar.next()
 
         bar.finish()

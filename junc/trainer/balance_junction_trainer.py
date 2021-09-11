@@ -71,8 +71,8 @@ class Trainer():
 
     def train(self, train_loader, val_loader=None):
         for epoch in range(1, self.opt.max_epochs + 1):
-            self.lr_scheduler.step()
             self.step(epoch, train_loader)
+            self.lr_scheduler.step()
             torch.save(self.model, self.saveDir / 'model_{}.pth'.format(epoch))
             if val_loader is not None:
                self.step(epoch, val_loader, is_val=True, split='val')
@@ -188,23 +188,23 @@ class Trainer():
                 #torch.nn.utils.clip_grad_norm(self.model.parameters(), 1.0)
                 self.optimizer.step()
             Loss.update(
-                loss.data[0],
+                loss.item(),
                 inp.size(0)
             )
             LossJuncConf.update(
-                junc_conf_loss.data[0],
+                junc_conf_loss.item(),
                 inp.size(0)
             )
             LossBinConf.update(
-                bin_conf_loss.data[0],
+                bin_conf_loss.item(),
                 inp.size(0)
             )
             LossJuncRes.update(
-                junc_res_loss.data[0],
+                junc_res_loss.item(),
                 inp.size(0)
             )
             LossBinRes.update(
-                bin_res_loss.data[0],
+                bin_res_loss.item(),
                 inp.size(0)
             )
 
@@ -215,7 +215,7 @@ class Trainer():
             hr, mins = divmod(mins, 60)
             rsecs = "{:02d}:{:02d}:{:02d}".format(int(hr), int(mins), int(secs))
 
-            logStr = '{split} epoch: [{0}][{1}/{2}]| LR: {3:.6f}| Speed: {4:.2f}/s| Remaining: {5} | Loss {Loss.avg:.6f}|  JuncConf {JC.avg:.6f}| JuncRes {JR.avg:.6f}| BinConf {BC.avg:.6f}| BinRes {BR.avg:.6f}'.format(epoch, i, iter_per_epoch, self.lr_scheduler.get_lr()[0], float(i+1.)/elapsed, rsecs, split=split, Loss=Loss, JC=LossJuncConf, JR=LossJuncRes, BC=LossBinConf, BR=LossBinRes)
+            logStr = '{split} epoch: [{0}][{1}/{2}]| LR: {3:.6f}| Speed: {4:.2f}/s| Remaining: {5} | Loss {Loss.avg:.6f}|  JuncConf {JC.avg:.6f}| JuncRes {JR.avg:.6f}| BinConf {BC.avg:.6f}| BinRes {BR.avg:.6f}'.format(epoch, i, iter_per_epoch, self.lr_scheduler.get_last_lr()[0], float(i+1.)/elapsed, rsecs, split=split, Loss=Loss, JC=LossJuncConf, JR=LossJuncRes, BC=LossBinConf, BR=LossBinRes)
 
 
             bar.suffix = logStr

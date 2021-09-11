@@ -39,10 +39,10 @@ class Loss(nn.Module):
         # bin_conf_result = bin_conf_result[:, 1, :, :, :]
         # bin_res_result = bin_residual
 
-        junc_conf_loss = torch.nn.NLLLoss(weight=None, reduce=False)(
+        junc_conf_loss = torch.nn.NLLLoss(weight=None, reduction='none')(
             F.log_softmax(junction_logits, dim=1), junc_conf_var)
         junc_res_loss = torch.nn.MSELoss(
-            reduce=False)(junction_loc, junc_res_var)
+            reduction='none')(junction_loc, junc_res_var)
         # original
         #junc_conf_loss = torch.mean(junc_conf_loss)
         #junc_res_loss = torch.mean(junc_res_loss)
@@ -54,13 +54,13 @@ class Loss(nn.Module):
 
         
         # N x 2 x H x W
-        bin_conf_loss = torch.nn.NLLLoss(weight=None, reduce=False)(F.log_softmax(
+        bin_conf_loss = torch.nn.NLLLoss(weight=None, reduction='none')(F.log_softmax(
             bin_logits.view(-1, 2, self.grid_h * self.num_bin, self.grid_w), dim=1), bin_conf_var.view(-1, self.grid_h * self.num_bin, self.grid_w))
         bin_conf_loss = bin_conf_loss.view(-1,
                                            self.num_bin, self.grid_h, self.grid_w)
         # N x self.num_bin x H x W
         bin_res_loss = torch.nn.MSELoss(
-            reduce=False)(bin_residual, bin_res_var)
+            reduction='none')(bin_residual, bin_res_var)
         # N x self.num_bin x H x W
 
         mask_bin = junc_conf_var.unsqueeze(1).float()
